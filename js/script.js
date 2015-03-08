@@ -1,6 +1,6 @@
 var margin = {top: 20, right: 80, bottom: 30, left: 50},
-    width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+    width = $(".chart").width()  - margin.left - margin.right,
+    height = $(".chart").height()  - margin.top - margin.bottom;
 
 var parseDate = d3.time.format("%Y%m%d").parse;
 
@@ -22,7 +22,7 @@ var yAxis = d3.svg.axis()
 
 var line = d3.svg.line()
     .interpolate("basis")
-    .x(function(d) { return x(d.period); })
+    .x(function(d) { return x(d.date); })
     .y(function(d) { return y(d.hpi); });
 
 var svg = d3.select(".chart").append("svg")
@@ -44,12 +44,12 @@ console.log(data);
     return {
       name: name,
       values: data.map(function(d) {
-        return {date: d.date, hpi: +d[name]};
+        return {date: d.period, hpi: +d[name]};
       })
     };
   });
 
-  x.domain(d3.extent(data, function(d) { return d.date; }));
+  x.domain(d3.extent(data, function(d) { return d.period; }));
 
   y.domain([
     d3.min(cities, function(c) { return d3.min(c.values, function(v) { return v.hpi; }); }),
@@ -83,7 +83,7 @@ console.log(data);
 
   city.append("text")
       .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
-      .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.temperature) + ")"; })
+      .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.hpi) + ")"; })
       .attr("x", 3)
       .attr("dy", ".35em")
       .text(function(d) { return d.name; });
