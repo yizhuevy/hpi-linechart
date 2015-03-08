@@ -1,6 +1,6 @@
 var margin = {top: 20, right: 80, bottom: 30, left: 50},
     width = $(".chart").width()  - margin.left - margin.right,
-    height = $(".chart").height()  - margin.top - margin.bottom;
+    height = 800  - margin.top - margin.bottom;
 
 var parseDate = d3.time.format("%Y%m%d").parse;
 
@@ -31,7 +31,7 @@ var svg = d3.select(".chart").append("svg")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-d3.tsv("js/hpi.tsv", function(error, data) {
+d3.csv("js/hpi.csv", function(error, data) {
   color.domain(d3.keys(data[7]).filter(function(key) { return key !== "period"; }));
 
 console.log(data);
@@ -87,4 +87,46 @@ console.log(data);
       .attr("x", 3)
       .attr("dy", ".35em")
       .text(function(d) { return d.name; });
+
+      svg.selectAll(".dot")
+  .data(data)
+  .enter()
+  .append("circle")
+  .attr("cx", function(d){
+    return x(d.period);
+  })
+
+.attr("cy", function(d){
+    return y(d.Columbia);
+  })
+
+.attr("r", 3)
+.on("mouseover",function(d){
+  var dispDate = moment(d.period).format("MMM, YYYY");
+  $(".tt").html(
+"<div class='date'>"+dispDate+"</div>"+
+"<div class='val'>"+"HPI:"+d.Columbia+"</div>"
+
+    );
+  $(".tt").show();
+})
+.on("mouseout", function(d){
+  $(".tt").hide();
+})
+
+.on("mousemove", function(d){
+  var pos = d3.mouse(this);
+
+  var left = pos[0] + margin.left+ 15 - $(".tt").width() -10;
+  var top = pos[1] + margin.top - $(".tt").height() - 10;
+
+$(".tt").css({
+  "left" : left + "px",  
+  "top" : top + "px"
+})
+
+})
+
+
+
 });

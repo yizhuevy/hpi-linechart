@@ -2,11 +2,31 @@
 
 
 .chart {
-  height: 500px;
+  height: 900px;
+}
+
+.tt{
+	background-color: white;
+	font-size: 13px;
+	border: 1px solid black;
+	position: absolute;
+	display:none;
+	padding: 20px;
+}
+
+.tt .date {
+	font-size: 13px;
+	color:#999;
+	text-transform: uppercase;
+}
+
+.tt .val{
+	font-size: 18px;
+	font-weight: bold;
 }
 
 body {
-  font: 10px sans-serif;
+  font: 12px sans-serif;
 }
 
 .axis path,
